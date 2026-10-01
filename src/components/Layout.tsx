@@ -4,6 +4,7 @@ import { Trophy, ClipboardList, Users, CalendarDays, UserRound, LogOut, Settings
 import { useAuth } from '../context/AuthContext'
 import { ROL_LABEL } from '../lib/formato'
 import { CLUB, logoUrl } from '../lib/club'
+import Firma from './Firma'
 
 const MENU = [
   { to: '/torneos', label: 'Torneos', icono: Trophy },
@@ -92,6 +93,7 @@ export default function Layout() {
       <main className="min-w-0 flex-1 px-4 pb-28 pt-6 sm:px-8 lg:pb-12 lg:pt-10">
         <div className="mx-auto max-w-6xl">
           <Outlet />
+          <Firma className="mt-10" />
         </div>
       </main>
 
