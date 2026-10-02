@@ -12,7 +12,7 @@ export interface Categoria {
   id: number
   nombre: string
   genero: Genero
-  /** 'nivel' = 3ra..7ma (categoría propia del jugador); 'suma' = Suma 8..14 */
+  /** 'nivel' = 1ra..9na (categoría propia del jugador); 'suma' = Suma 4..20 */
   tipo: TipoCategoria
   nivel: number | null
   suma: number | null

@@ -305,11 +305,15 @@ export const AYUDA_ADMIN: Ayuda = {
       id: 'categorias',
       titulo: 'Categorías',
       ruta: '/admin/categorias',
-      resumen: 'Las categorías que se pueden habilitar en los torneos.',
+      resumen: 'Las categorías de los jugadores (por categoría) y las de los americanos (por suma).',
       pasos: [
-        'Las categorías de nivel (3ra a 7ma, Caballeros y Damas) vienen fijas.',
-        'Creá categorías por suma (por ejemplo Suma 12 Mixto) eligiendo género y suma.',
-        'Activá o desactivá categorías: las inactivas no aparecen al armar un torneo.',
+        'Nueva categoría: elegí el tipo (por categoría o por suma), el género y el nivel o la suma. El nombre se arma solo (por ejemplo "8va Damas" o "Suma 12 Mixto").',
+        'Desactivá las que no uses: no aparecen al registrarse, al recategorizar ni al armar un torneo. Los jugadores que ya la tienen la conservan.',
+        'Eliminá una categoría que nunca se usó. Junto a cada categoría de jugadores ves cuántos jugadores tiene.',
+      ],
+      ojo: [
+        'Solo se puede eliminar una categoría sin jugadores, sin torneos y sin historial de cambios; si no, desactivala.',
+        'En categorías de caballeros una dama cuenta 2 categorías más (dama 6ta = caballero 8va).',
       ],
     },
     {
