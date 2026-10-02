@@ -65,7 +65,7 @@ export default function Registro() {
           <Field label="Categoría" hint="El administrador puede ajustarla después.">
             <Select value={f.categoria_id} onChange={set('categoria_id')} required>
               <option value="" disabled>Elegí tu categoría</option>
-              {categorias.filter((c) => c.tipo === 'nivel' && c.activa).map((c) => <option key={c.id} value={c.id}>{c.nombre}</option>)}
+              {categorias.filter((c) => c.tipo === 'nivel').map((c) => <option key={c.id} value={c.id}>{c.nombre}</option>)}
             </Select>
           </Field>
         </div>

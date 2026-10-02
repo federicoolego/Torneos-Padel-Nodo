@@ -156,7 +156,7 @@ export default function AdminJugadores() {
                           recategorizar(j, nueva.id, nueva.nombre)
                       }}
                     >
-                      {catsNivel.filter((c) => c.activa || c.id === j.categoria_id).map((c) => <option key={c.id} value={c.id}>{c.nombre}</option>)}
+                      {catsNivel.map((c) => <option key={c.id} value={c.id}>{c.nombre}{c.activa ? '' : ' (sin torneos)'}</option>)}
                     </Select>
                   </td>
                   <td className="pr-3">

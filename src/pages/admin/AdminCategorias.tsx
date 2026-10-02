@@ -76,7 +76,7 @@ export default function AdminCategorias() {
     setMsg(null)
     const n = jugadores[c.id] ?? 0
     if (c.activa && c.tipo === 'nivel' && n > 0 &&
-        !confirm(`${c.nombre} tiene ${n} jugador(es). La conservan, pero no se va a poder elegir al registrarse ni al recategorizar, y no aparece al armar torneos. ¿Desactivarla?`)) return
+        !confirm(`${c.nombre} tiene ${n} jugador(es). La conservan y se puede seguir asignando a jugadores, pero no va a aparecer al armar torneos. ¿Desactivarla?`)) return
     const { error } = await supabase.from('categorias').update({ activa: !c.activa }).eq('id', c.id)
     if (error) return setMsg({ tipo: 'error', txt: mensajeError(error) })
     setMsg({ tipo: 'ok', txt: `${c.nombre} ${c.activa ? 'desactivada' : 'activada'}` })
@@ -122,7 +122,7 @@ export default function AdminCategorias() {
 
   return (
     <>
-      <Titulo bajada="Por categoría: las de los jugadores (3ra, 4ta… 8va). Por suma: se usan en los americanos; la pareja entra si la suma de sus categorías es igual o mayor (en caballeros una dama suma 2 más; en mixto va una dama y un caballero). Las inactivas no aparecen al armar un torneo ni al registrarse.">
+      <Titulo bajada="Por categoría: las de los jugadores (3ra, 4ta… 8va). Por suma: se usan en los americanos; la pareja entra si la suma de sus categorías es igual o mayor (en caballeros una dama suma 2 más; en mixto va una dama y un caballero). Las inactivas no aparecen al armar un torneo.">
         Categorías
       </Titulo>
       {msg && <div className="mb-4"><Alerta tipo={msg.tipo}>{msg.txt}</Alerta></div>}
@@ -192,7 +192,7 @@ export default function AdminCategorias() {
           <Card>
             <h2 className="font-display text-2xl font-bold">Tené en cuenta</h2>
             <ul className="mt-2 list-disc space-y-1.5 pl-5 text-sm text-noche/75">
-              <li>Una categoría desactivada no aparece al registrarse, al recategorizar ni al armar torneos. Los jugadores que ya la tienen la conservan.</li>
+              <li>Una categoría desactivada no aparece al armar torneos. Las de jugadores se siguen pudiendo elegir al registrarse y al recategorizar (por ejemplo, pasar a alguien de 4ta a 3ra aunque no se armen torneos de 3ra).</li>
               <li>Una categoría con jugadores no se puede eliminar: primero recategorizalos desde Admin → Jugadores (cuentan también los jugadores inactivos).</li>
               <li>Tampoco se puede eliminar si ya se usó en torneos o figura en el historial de algún jugador: en ese caso, desactivala.</li>
               <li>En categorías de caballeros una dama cuenta 2 categorías más (dama 6ta = caballero 8va).</li>

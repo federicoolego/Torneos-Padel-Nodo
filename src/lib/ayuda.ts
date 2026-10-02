@@ -308,7 +308,7 @@ export const AYUDA_ADMIN: Ayuda = {
       resumen: 'Las categorías de los jugadores (por categoría) y las de los americanos (por suma).',
       pasos: [
         'Nueva categoría: elegí el tipo (por categoría o por suma), el género y el nivel o la suma. El nombre se arma solo (por ejemplo "8va Damas" o "Suma 12 Mixto").',
-        'Desactivá las que no uses: no aparecen al registrarse, al recategorizar ni al armar un torneo. Los jugadores que ya la tienen la conservan.',
+        'Desactivá las que no uses en torneos: no aparecen al armar un torneo. Las categorías de jugadores desactivadas se pueden seguir asignando al registrarse y al recategorizar.',
         'Eliminá una categoría que nunca se usó. Junto a cada categoría de jugadores ves cuántos jugadores tiene.',
       ],
       ojo: [
