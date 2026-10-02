@@ -85,6 +85,8 @@ export default function AdminCategorias() {
 
   async function eliminar(c: Categoria) {
     setMsg(null)
+    const n = jugadores[c.id] ?? 0
+    if (n > 0) return setMsg({ tipo: 'error', txt: `No se puede eliminar ${c.nombre}: tiene ${n} jugador(es). Recategorizalos antes desde Admin → Jugadores.` })
     if (!confirm(`¿Eliminar ${c.nombre}? No se puede deshacer.`)) return
     const { error } = await supabase.rpc('admin_eliminar_categoria', { p_categoria: c.id })
     if (error) return setMsg({ tipo: 'error', txt: mensajeError(error) })
@@ -94,6 +96,7 @@ export default function AdminCategorias() {
   }
 
   function Fila({ c, etiqueta, detalle }: { c: Categoria; etiqueta: string; detalle?: string }) {
+    const conJugadores = jugadores[c.id] ?? 0
     return (
       <li className="flex items-center justify-between gap-2 text-sm">
         <span className={c.activa ? 'font-medium' : 'text-noche/40 line-through'}>
@@ -104,7 +107,14 @@ export default function AdminCategorias() {
           <button onClick={() => alternar(c)} className="text-xs font-semibold text-cancha hover:underline">
             {c.activa ? 'Desactivar' : 'Activar'}
           </button>
-          <button onClick={() => eliminar(c)} className="text-xs font-semibold text-red-700 hover:underline">Eliminar</button>
+          <button
+            onClick={() => eliminar(c)}
+            disabled={conJugadores > 0}
+            title={conJugadores > 0 ? `Tiene ${conJugadores} jugador(es): recategorizalos antes de eliminarla` : undefined}
+            className="text-xs font-semibold text-red-700 hover:underline disabled:cursor-not-allowed disabled:text-noche/30 disabled:no-underline"
+          >
+            Eliminar
+          </button>
         </span>
       </li>
     )
@@ -183,7 +193,8 @@ export default function AdminCategorias() {
             <h2 className="font-display text-2xl font-bold">Tené en cuenta</h2>
             <ul className="mt-2 list-disc space-y-1.5 pl-5 text-sm text-noche/75">
               <li>Una categoría desactivada no aparece al registrarse, al recategorizar ni al armar torneos. Los jugadores que ya la tienen la conservan.</li>
-              <li>Solo se puede eliminar una categoría que nunca se usó: sin jugadores, sin torneos y sin historial. Si no, desactivala.</li>
+              <li>Una categoría con jugadores no se puede eliminar: primero recategorizalos desde Admin → Jugadores (cuentan también los jugadores inactivos).</li>
+              <li>Tampoco se puede eliminar si ya se usó en torneos o figura en el historial de algún jugador: en ese caso, desactivala.</li>
               <li>En categorías de caballeros una dama cuenta 2 categorías más (dama 6ta = caballero 8va).</li>
             </ul>
           </Card>
