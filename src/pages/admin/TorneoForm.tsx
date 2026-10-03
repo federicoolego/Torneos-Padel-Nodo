@@ -5,6 +5,7 @@ import { supabase, mensajeError } from '../../lib/supabase'
 import { useAuth } from '../../context/AuthContext'
 import type { Categoria, EstadoTorneo, Torneo, TorneoCategoriaVista } from '../../lib/types'
 import { aInputLocal, desdeInputLocal, ESTADO_TORNEO_LABEL } from '../../lib/formato'
+import { FORMATO_LABEL, FORMATOS_DEFAULT, INSTANCIAS, type FormatoPartido, type Formatos } from '../../lib/formatos'
 import { Alerta, Button, Card, Field, Input, Select, Spinner, Textarea, Titulo } from '../../components/ui'
 
 /** 'YYYY-MM-DD' → el día anterior, en el mismo formato */
@@ -25,8 +26,8 @@ export default function TorneoForm() {
   const [f, setF] = useState({
     nombre: '', descripcion: '', fecha_desde: '', fecha_hasta: '', cierre: '',
     observaciones: '', precio: '', estado: 'borrador' as EstadoTorneo,
-    americano: false, games: 9,
   })
+  const [formatos, setFormatos] = useState<Formatos>(FORMATOS_DEFAULT)
   const [cats, setCats] = useState<Record<number, CatForm>>({})
   const [error, setError] = useState('')
   const [ok, setOk] = useState('')
@@ -47,8 +48,8 @@ export default function TorneoForm() {
           nombre: tor.nombre, descripcion: tor.descripcion ?? '', fecha_desde: tor.fecha_desde, fecha_hasta: tor.fecha_hasta,
           cierre: aInputLocal(tor.cierre_inscripcion), observaciones: tor.observaciones ?? '',
           precio: tor.precio_inscripcion?.toString() ?? '', estado: tor.estado,
-          americano: tor.americano, games: tor.games_set_unico ?? 9,
         })
+        if (tor.formatos) setFormatos({ ...FORMATOS_DEFAULT, ...tor.formatos })
       }
       ;((tc.data as TorneoCategoriaVista[]) ?? []).forEach((c) => {
         base[c.categoria_id] = { activa: true, cupo_max: c.cupo_max, cupo_min: c.cupo_min, tcId: c.id, inscriptas: c.inscriptas ?? 0 }
@@ -61,8 +62,8 @@ export default function TorneoForm() {
   async function guardar(e: FormEvent) {
     e.preventDefault()
     setError(''); setOk('')
-    const fechaHasta = f.americano ? f.fecha_desde : f.fecha_hasta
-    if (!f.fecha_desde) return setError(f.americano ? 'Completá la fecha del torneo' : 'Completá la fecha de inicio del torneo')
+    const fechaHasta = f.fecha_hasta
+    if (!f.fecha_desde) return setError('Completá la fecha de inicio del torneo')
     if (!fechaHasta) return setError('Completá la fecha de fin del torneo')
     if (!f.cierre) return setError('Completá la fecha y hora de cierre de inscripción')
     if (fechaHasta < f.fecha_desde) return setError('La fecha hasta no puede ser anterior a la fecha desde')
@@ -76,7 +77,7 @@ export default function TorneoForm() {
     setGuardando(true)
     const datos = {
       nombre: f.nombre.trim(), descripcion: f.descripcion.trim() || null, fecha_desde: f.fecha_desde, fecha_hasta: fechaHasta,
-      americano: f.americano, games_set_unico: f.americano ? f.games : null,
+      formatos,
       cierre_inscripcion: desdeInputLocal(f.cierre), observaciones: f.observaciones.trim() || null,
       precio_inscripcion: f.precio ? Number(f.precio) : null, estado: f.estado,
     }
@@ -104,7 +105,7 @@ export default function TorneoForm() {
 
   if (cargando) return <Spinner />
   /** Último momento válido para el cierre: el día anterior a la fecha de fin */
-  const finTorneo = f.americano ? f.fecha_desde : f.fecha_hasta
+  const finTorneo = f.fecha_hasta
   const maxCierre = finTorneo ? `${diaAnterior(finTorneo)}T23:59` : undefined
   const set = (k: keyof typeof f) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => setF({ ...f, [k]: e.target.value })
 
@@ -117,35 +118,35 @@ export default function TorneoForm() {
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="sm:col-span-2"><Field label="Nombre"><Input value={f.nombre} onChange={set('nombre')} required /></Field></div>
             <div className="sm:col-span-2"><Field label="Descripción"><Textarea value={f.descripcion} onChange={set('descripcion')} /></Field></div>
-            <div className="sm:col-span-2 rounded-lg bg-vidrio p-3">
-              <label className="flex items-center gap-2 text-sm font-semibold">
-                <input type="checkbox" checked={f.americano} onChange={(e) => setF({ ...f, americano: e.target.checked })} />
-                Torneo americano
-              </label>
-              <p className="mt-1 text-xs text-noche/60">Se juega en el día, a un solo set. No se puede cambiar una vez cargados resultados.</p>
-              {f.americano && (
-                <div className="mt-3 flex items-center gap-2 text-sm">
-                  Un set a
-                  <Select value={f.games} onChange={(e) => setF({ ...f, games: Number(e.target.value) })} className="w-20 py-1" aria-label="Games por set">
-                    <option value={7}>7</option>
-                    <option value={9}>9</option>
-                  </Select>
-                  games
-                </div>
-              )}
-            </div>
-            {f.americano ? (
-              <Field label="Fecha"><Input type="date" value={f.fecha_desde} onChange={set('fecha_desde')} required /></Field>
-            ) : (
-              <>
-                <Field label="Fecha desde"><Input type="date" value={f.fecha_desde} onChange={set('fecha_desde')} required /></Field>
-                <Field label="Fecha hasta"><Input type="date" value={f.fecha_hasta} onChange={set('fecha_hasta')} required /></Field>
-              </>
-            )}
+            <Field label="Fecha desde"><Input type="date" value={f.fecha_desde} onChange={set('fecha_desde')} required /></Field>
+            <Field label="Fecha hasta"><Input type="date" value={f.fecha_hasta} onChange={set('fecha_hasta')} required /></Field>
             <Field label="Cierre de inscripción" hint="Fecha y hora, anterior a la fecha de fin del torneo. Después del cierre no se puede cancelar ni editar.">
               <Input type="datetime-local" value={f.cierre} onChange={set('cierre')} max={maxCierre} required />
             </Field>
             <Field label="Precio de inscripción (por pareja)"><Input type="number" min="0" step="100" value={f.precio} onChange={set('precio')} /></Field>
+            <div className="sm:col-span-2 rounded-lg bg-vidrio p-3">
+              <div className="flex flex-wrap items-baseline justify-between gap-2">
+                <p className="text-sm font-semibold">Formato de partidos</p>
+                <button type="button" onClick={() => setFormatos(FORMATOS_DEFAULT)} className="text-xs font-semibold text-cancha hover:underline">
+                  Usar el estándar del club
+                </button>
+              </div>
+              <p className="mt-1 text-xs text-noche/60">
+                Viene cargado con el estándar del club: si no lo tocás, se usa ese. Cada partido toma el formato de su instancia.
+                Una instancia con resultados cargados ya no se puede cambiar.
+              </p>
+              <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                {INSTANCIAS.map(({ fase, label }) => (
+                  <label key={fase} className="flex items-center justify-between gap-2 text-sm">
+                    <span className="w-20 shrink-0 font-medium">{label}</span>
+                    <Select value={formatos[fase]} onChange={(e) => setFormatos({ ...formatos, [fase]: e.target.value as FormatoPartido })}
+                            className="py-1" aria-label={`Formato de ${label}`}>
+                      {(Object.keys(FORMATO_LABEL) as FormatoPartido[]).map((k) => <option key={k} value={k}>{FORMATO_LABEL[k]}</option>)}
+                    </Select>
+                  </label>
+                ))}
+              </div>
+            </div>
             <div className="sm:col-span-2"><Field label="Observaciones"><Textarea value={f.observaciones} onChange={set('observaciones')} placeholder="Premios, pelotas, reglamento, etc." /></Field></div>
             <div className="sm:col-span-2">
               <Field label="Estado" hint="Borrador: solo lo ves vos. Inscripción abierta: visible y admite inscripciones hasta el cierre.">

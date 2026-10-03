@@ -79,8 +79,8 @@ export function resumenSets(p: PartidoVista): string {
     .join(' / ')
 }
 
-/** Texto corto del formato de partido, para badges y ayudas */
-export function formatoPartido(p: Pick<PartidoVista, 'fase' | 'super_tiebreak' | 'games_set_unico'>): string {
-  if (p.games_set_unico !== null) return `Un set a ${p.games_set_unico} games`
-  return p.fase === 'zona' && p.super_tiebreak ? '3er set: super tiebreak' : 'Al mejor de 3'
+/** Texto corto del formato del partido (sale de su instancia), para badges y ayudas */
+export function formatoPartido(p: Pick<PartidoVista, 'super_tiebreak' | 'games_set_unico'>): string {
+  if (p.games_set_unico !== null) return `Americano a ${p.games_set_unico} games`
+  return p.super_tiebreak ? 'Mejor de 3 · 3ro super tiebreak' : 'Mejor de 3 sets'
 }

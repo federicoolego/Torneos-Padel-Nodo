@@ -102,9 +102,9 @@ export const AYUDA_JUGADOR: Ayuda = {
       pasos: [
         'Zona de 3 parejas: todos contra todos; clasifican 2.',
         'Zona de 4 parejas: 1 vs 4 y 2 vs 3; después ganadores contra ganadores y perdedores contra perdedores. Clasifican 3.',
-        'En zona se juega al mejor de 3 sets y el tercero es super tiebreak a 11 (diferencia de 2).',
-        'Playoff: mejor de 3 sets normales. Los mejores clasificados pueden pasar directo la primera ronda (bye).',
-        'Torneo americano: se juega en el día, a un solo set de 7 o 9 games.',
+        'Cada instancia (zonas, octavos, cuartos, semifinal, final) tiene su formato, y lo ves en cada partido: al mejor de 3 sets, al mejor de 3 con el 3ro en super tiebreak a 11, o americano (un set a 7 o 9 games).',
+        'En el detalle del torneo está el resumen de formatos de todas las instancias.',
+        'Playoff: eliminación directa. Los mejores clasificados pueden pasar directo la primera ronda (bye).',
         'Un W.O. cuenta 2-0 en sets y 12-0 en games.',
       ],
     },
@@ -145,9 +145,10 @@ const CARGA_RESULTADOS: SeccionAyuda = {
   resumen: 'La app valida el resultado antes de guardarlo y avanza sola a los ganadores.',
   pasos: [
     'Cargá los games de cada set. Un set termina 6-0 a 6-4, 7-5 o 7-6.',
-    'En zona, el tercer set es super tiebreak a 11 con diferencia de 2 (11-7, 12-10…).',
+    'Cada partido muestra su formato: el modal de carga se adapta solo.',
+    'Si el 3ro es super tiebreak, va a 11 con diferencia de 2 (11-7, 12-10…).',
     'Si el partido se definió en 2 sets, dejá el tercero vacío.',
-    'En un americano se carga un solo set (por ejemplo 9-5).',
+    'Si es americano se carga un solo set (por ejemplo 9-5 en un set a 9 games).',
     'W.O.: elegí qué pareja gana; cuenta 2-0 en sets y 12-0 en games.',
     'Al guardar, la tabla de la zona se actualiza y, en playoff, el ganador pasa solo al partido siguiente.',
   ],
@@ -199,7 +200,7 @@ export const AYUDA_ADMIN: Ayuda = {
       resumen: 'Crear y editar torneos y entrar a gestionar cada categoría.',
       pasos: [
         'Nuevo torneo: nombre, descripción, fechas, cierre de inscripción, precio por pareja y observaciones (premios, pelotas, reglamento).',
-        'Torneo americano: se juega en un día, a un solo set de 7 o 9 games.',
+        'Formato de partidos: viene cargado con el estándar del club (zonas a cuartos en americano a 9, semi y final al mejor de 3 con super tiebreak). Si el torneo es distinto, cambiá el formato de cada instancia; si no, no toques nada.',
         'Habilitá las categorías del torneo y definí el cupo de cada una (máximo 24, mínimo 6 parejas para que se arme).',
         'Estado: Borrador (solo lo ve la administración), Inscripción abierta, En curso, Finalizado o Cancelado.',
         'Desde el listado, "Gestionar" abre cada categoría con sus pestañas.',
@@ -208,7 +209,7 @@ export const AYUDA_ADMIN: Ayuda = {
         'Las fechas de inicio, de fin y de cierre de inscripción son obligatorias.',
         'El cierre de inscripción tiene que ser anterior a la fecha de fin del torneo.',
         'No se puede quitar una categoría que ya tiene parejas inscriptas.',
-        'El formato (americano o no, games del set) no se puede cambiar cuando ya hay resultados cargados.',
+        'El formato de una instancia no se puede cambiar cuando esa instancia ya tiene resultados cargados. Si cambiás una instancia sin resultados, sus partidos se actualizan solos.',
       ],
     },
     {

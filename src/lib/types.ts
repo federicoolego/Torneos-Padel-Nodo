@@ -76,9 +76,8 @@ export interface Torneo {
   observaciones: string | null
   precio_inscripcion: number | null
   estado: EstadoTorneo
-  /** Americano: se juega en el día a un solo set de games_set_unico games */
-  americano: boolean
-  games_set_unico: number | null
+  /** Formato de partido de cada instancia (zona, 16avos… final) */
+  formatos: import('./formatos').Formatos
 }
 
 export interface TorneoCategoriaVista {

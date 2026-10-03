@@ -9,6 +9,7 @@ import {
 } from '../lib/fechas'
 import { Alerta, Select, Spinner, Titulo } from '../components/ui'
 import { etiquetaPartido, nombreLado } from '../components/Partidos'
+import { formatoPartido } from '../lib/resultado'
 import ResultadoModal from '../components/ResultadoModal'
 
 type Vista = 'dia' | 'semana' | 'mes'
@@ -166,6 +167,7 @@ function Tarjeta({ p, ahora, onAbrir, puedeCargar, compacta = false }: { p: Part
           <MapPin className="h-3 w-3 shrink-0" aria-hidden />{p.sede ?? 'Sin sede'}{p.cancha && ` · ${p.cancha}`} · {etiquetaPartido(p)}
         </p>
       )}
+      {!compacta && !res && <p className="truncate text-[11px] font-semibold text-noche/60">{formatoPartido(p)}</p>}
       {res ? (
         <p className="mt-1 text-xs font-semibold text-emerald-800">{res}</p>
       ) : editable && (
