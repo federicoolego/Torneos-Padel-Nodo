@@ -1,4 +1,3 @@
-import { ReglasTorneo } from '../components/Reglas'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
 import { ArrowLeft, CalendarRange, Hourglass, Settings2 } from 'lucide-react'
@@ -116,8 +115,6 @@ export default function TorneoDetalle() {
         </div>
         {torneo.observaciones && <p className="mt-4 border-t border-white/15 pt-3 text-xs text-white/65">{torneo.observaciones}</p>}
       </header>
-
-      <div className="mb-6"><ReglasTorneo /></div>
 
       {cats.length === 0 ? (
         <Vacio titulo="Este torneo todavía no tiene categorías" />
@@ -311,7 +308,6 @@ function InscribirModal({
           <Field label="Problemas de horario" hint="Podés modificarlo hasta el cierre de inscripción.">
             <Textarea value={horario} onChange={(e) => setHorario(e.target.value)} placeholder="Ej: el viernes no podemos antes de las 20 h. Si no tienen, escribí 'Ninguno'." />
           </Field>
-          <ReglasTorneo compacto />
           <Alerta tipo="aviso">
             Podés cancelar la inscripción hasta el {fechaHora(torneo.cierre_inscripcion)}. Después del cierre, si la pareja no se presenta, la inscripción se cobra igual.
           </Alerta>

@@ -91,7 +91,6 @@ export const AYUDA_JUGADOR: Ayuda = {
         'Rendimiento: tus participaciones y hasta qué instancia llegaste en cada torneo.',
       ],
       ojo: [
-        'Hay 15 minutos de tolerancia: si la pareja completa no está en el predio, el partido se pierde.',
         'Al llegar, anunciense en pareja con la organización. La cancha asignada es orientativa y puede cambiar.',
       ],
     },
